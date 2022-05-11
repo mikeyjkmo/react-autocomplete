@@ -23,23 +23,17 @@ function useDebounce(value, delay) {
   return debouncedValue;
 }
 
-async function fetchMarvelCharacters(nameStartsWith) {
-  if (!nameStartsWith || !nameStartsWith.length) {
-    return {
-      data: {
-        results: [],
-      },
-    };
-  }
-
-  const res = await fetch(
-    "https://gateway.marvel.com:443/v1/public/characters?" +
-      new URLSearchParams({
-        nameStartsWith,
-        apikey: process.env.REACT_APP_MARVEL_API_KEY,
-      })
-  );
-  return res.json();
+async function fakeFetchMarvelCharacteres(nameStartsWith) {
+  return {
+    data: {
+      results: [
+        {name: "iron man"},
+        {name: "thor"},
+        {name: "loki"},
+        {name: "captain america"},
+      ].filter(({ name }) => name.startsWith(nameStartsWith)),
+    },
+  };
 }
 
 function AutocompleteDropdown() {
@@ -49,7 +43,7 @@ function AutocompleteDropdown() {
   const debouncedText = useDebounce(text, 1000);
 
   useEffect(() => {
-      fetchMarvelCharacters(debouncedText)
+      fakeFetchMarvelCharacteres(debouncedText)
         .then((res) => res.data.results.map((character) => character.name))
         .then(setMatchingItems);
   }, [debouncedText]);
