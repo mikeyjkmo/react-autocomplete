@@ -1,20 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDebounce } from "./utils";
+import { fakeFetchMarvelCharacteres } from "./marvelApi";
 
 import "./App.css";
-
-async function fakeFetchMarvelCharacteres(nameStartsWith) {
-  return {
-    data: {
-      results: [
-        { name: "iron man" },
-        { name: "thor" },
-        { name: "loki" },
-        { name: "captain america" },
-      ].filter(({ name }) => name.startsWith(nameStartsWith)),
-    },
-  };
-}
 
 function AutocompleteDropdown({
   debounceDelay = 1000,

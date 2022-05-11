@@ -16,3 +16,16 @@ export async function fetchMarvelCharacters(nameStartsWith) {
   );
   return res.json();
 }
+
+export async function fakeFetchMarvelCharacteres(nameStartsWith) {
+  return {
+    data: {
+      results: [
+        { name: "iron man" },
+        { name: "thor" },
+        { name: "loki" },
+        { name: "captain america" },
+      ].filter(({ name }) => name.startsWith(nameStartsWith)),
+    },
+  };
+}
