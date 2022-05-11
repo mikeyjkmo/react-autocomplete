@@ -27,10 +27,10 @@ async function fakeFetchMarvelCharacteres(nameStartsWith) {
   return {
     data: {
       results: [
-        {name: "iron man"},
-        {name: "thor"},
-        {name: "loki"},
-        {name: "captain america"},
+        { name: "iron man" },
+        { name: "thor" },
+        { name: "loki" },
+        { name: "captain america" },
       ].filter(({ name }) => name.startsWith(nameStartsWith)),
     },
   };
@@ -38,25 +38,27 @@ async function fakeFetchMarvelCharacteres(nameStartsWith) {
 
 function AutocompleteDropdown() {
   const [text, setText] = useState("");
-  const [inFocus, setInFocus] = useState(false);
+  const [inputRef, setInputRef] = useState();
+  const [inFocus, setInFocus] = useState();
+
   const [matchingItems, setMatchingItems] = useState([]);
   const debouncedText = useDebounce(text, 1000);
 
   useEffect(() => {
-      fakeFetchMarvelCharacteres(debouncedText)
-        .then((res) => res.data.results.map((character) => character.name))
-        .then(setMatchingItems);
+    fakeFetchMarvelCharacteres(debouncedText)
+      .then((res) => res.data.results.map((character) => character.name))
+      .then(setMatchingItems);
   }, [debouncedText]);
 
   function itemTextWithMatch(item) {
-    const lowerCaseItem = item.toLowerCase();
-    const lowerCaseText = text.toLowerCase();
+    const itemToCompare = item.toLowerCase();
+    const textToCompare = text.toLowerCase();
 
-    if (!lowerCaseItem.startsWith(lowerCaseText)) {
+    if (!itemToCompare.startsWith(textToCompare)) {
       return item;
     }
 
-    const firstMatchingIndex = lowerCaseItem.indexOf(lowerCaseText);
+    const firstMatchingIndex = itemToCompare.indexOf(textToCompare);
     return (
       <>
         <span className="matching-letters">
@@ -81,6 +83,7 @@ function AutocompleteDropdown() {
               onClick={() => {
                 setText(item);
                 setInFocus(false);
+                inputRef.blur();
               }}
             >
               {itemTextWithMatch(item)}
@@ -98,6 +101,7 @@ function AutocompleteDropdown() {
         className="autocomplete-input"
         value={text}
         onInput={(e) => setText(e.target.value)}
+        ref={input => setInputRef(input)}
         onFocus={() => setInFocus(true)}
         onBlur={() => setInFocus(false)}
       />
