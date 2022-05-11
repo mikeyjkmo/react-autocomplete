@@ -16,19 +16,19 @@ async function fakeFetchMarvelCharacteres(nameStartsWith) {
   };
 }
 
-function AutocompleteDropdown({ debounceDelay = 1000 }) {
+function AutocompleteDropdown({
+  debounceDelay = 1000,
+  autoCompletionItems,
+  onTextInput,
+}) {
   const [text, setText] = useState("");
   const [inputRef, setInputRef] = useState();
   const [inFocus, setInFocus] = useState();
-
-  const [autoCompletionItems, setAutoCompletionItems] = useState([]);
   const debouncedText = useDebounce(text, debounceDelay);
 
   useEffect(() => {
-    fakeFetchMarvelCharacteres(debouncedText)
-      .then((res) => res.data.results.map((character) => character.name))
-      .then(setAutoCompletionItems);
-  }, [debouncedText]);
+    onTextInput(debouncedText);
+  }, [debouncedText, onTextInput]);
 
   function itemTextWithMatch(item) {
     const itemToCompare = item.toLowerCase();
@@ -91,9 +91,20 @@ function AutocompleteDropdown({ debounceDelay = 1000 }) {
 }
 
 function App() {
+  const [autoCompletionItems, setAutoCompletionItems] = useState([]);
+
+  const onTextInput = (text) => {
+    return fakeFetchMarvelCharacteres(text)
+      .then((res) => res.data.results.map((character) => character.name))
+      .then(setAutoCompletionItems);
+  };
+
   return (
     <div className="App">
-      <AutocompleteDropdown />
+      <AutocompleteDropdown
+        autoCompletionItems={autoCompletionItems}
+        onTextInput={onTextInput}
+      />
     </div>
   );
 }
