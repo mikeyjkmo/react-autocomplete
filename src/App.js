@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { useDebounce } from "./utils";
 import { fakeFetchMarvelCharacters } from "./marvelApi";
+import PropTypes from 'prop-types';
 
 import "./App.css";
 
 function AutocompleteDropdown({
-  debounceDelay = 1000,
   autoCompletionItems,
   onTextInput,
+  debounceDelay = 1000,
+  caseSensitive = false,
 }) {
   const [text, setText] = useState("");
   const [inputRef, setInputRef] = useState();
@@ -19,8 +21,8 @@ function AutocompleteDropdown({
   }, [debouncedText, onTextInput]);
 
   function itemTextWithMatch(item) {
-    const itemToCompare = item.toLowerCase();
-    const textToCompare = text.toLowerCase();
+    const itemToCompare = (!caseSensitive) ? item.toLowerCase() : item;
+    const textToCompare = (!caseSensitive) ? text.toLowerCase() : text;
 
     if (!itemToCompare.startsWith(textToCompare)) {
       return item;
@@ -76,6 +78,13 @@ function AutocompleteDropdown({
       {renderDropDown()}
     </div>
   );
+}
+
+AutocompleteDropdown.propTypes = {
+  autoCompletionItems: PropTypes.array,
+  onTextInput: PropTypes.func,
+  debounceDelay: PropTypes.number,
+  caseSensitive: PropTypes.bool,
 }
 
 function App() {
