@@ -3,8 +3,7 @@ import { useDebounce } from './utils';
 import PropTypes from 'prop-types';
 
 export function AutocompleteDropdown({
-  autoCompletionItems,
-  onDebouncedTextInput = () => {},
+  renderItems = () => {},
   onTextInput = () => {},
   debounceDelay = 1000,
   caseSensitive = false,
@@ -12,11 +11,14 @@ export function AutocompleteDropdown({
   const [text, setText] = useState("");
   const [inputRef, setInputRef] = useState();
   const [inFocus, setInFocus] = useState();
+  const [autoCompletionItems, setAutoCompletionItems] = useState([]);
   const debouncedText = useDebounce(text, debounceDelay);
 
   useEffect(() => {
-    onDebouncedTextInput(debouncedText);
-  }, [debouncedText, onDebouncedTextInput]);
+    // allow sync or async renderItems
+    const _renderItems = async () => renderItems(debouncedText);
+    _renderItems().then(setAutoCompletionItems);
+  }, [debouncedText, renderItems]);
 
   useEffect(() => {
     onTextInput(text);
@@ -83,8 +85,7 @@ export function AutocompleteDropdown({
 }
 
 AutocompleteDropdown.propTypes = {
-  autoCompletionItems: PropTypes.array,
-  onDebouncedTextInput: PropTypes.func,
+  renderItems: PropTypes.func,
   onTextInput: PropTypes.func,
   debounceDelay: PropTypes.number,
   caseSensitive: PropTypes.bool,
