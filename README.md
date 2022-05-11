@@ -5,7 +5,7 @@ This is a demo of a React Autocompletion component written with minimal dependen
 ## Running
 
 You'll firstly need an API key from the Marvel developer portal. Ensure that
-localhost is set as an accepted referred. Set this inside a `.env.local` file.
+localhost is set as an authorised referring. Set this inside a `.env.local` file.
 
 Example:
 ```
