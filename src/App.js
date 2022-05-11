@@ -16,13 +16,13 @@ async function fakeFetchMarvelCharacteres(nameStartsWith) {
   };
 }
 
-function AutocompleteDropdown() {
+function AutocompleteDropdown({ debounceDelay = 1000 }) {
   const [text, setText] = useState("");
   const [inputRef, setInputRef] = useState();
   const [inFocus, setInFocus] = useState();
 
   const [matchingItems, setMatchingItems] = useState([]);
-  const debouncedText = useDebounce(text, 1000);
+  const debouncedText = useDebounce(text, debounceDelay);
 
   useEffect(() => {
     fakeFetchMarvelCharacteres(debouncedText)
