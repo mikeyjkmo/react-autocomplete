@@ -17,7 +17,7 @@ export async function fetchMarvelCharacters(nameStartsWith) {
   return res.json();
 }
 
-export async function fakeFetchMarvelCharacteres(nameStartsWith) {
+export async function fakeFetchMarvelCharacters(nameStartsWith) {
   return {
     data: {
       results: [

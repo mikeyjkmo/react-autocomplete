@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDebounce } from "./utils";
-import { fakeFetchMarvelCharacteres } from "./marvelApi";
+import { fakeFetchMarvelCharacters } from "./marvelApi";
 
 import "./App.css";
 
@@ -82,7 +82,7 @@ function App() {
   const [autoCompletionItems, setAutoCompletionItems] = useState([]);
 
   const onTextInput = (text) => {
-    return fakeFetchMarvelCharacteres(text)
+    return fakeFetchMarvelCharacters(text)
       .then((res) => res.data.results.map((character) => character.name))
       .then(setAutoCompletionItems);
   };
