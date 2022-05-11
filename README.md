@@ -24,3 +24,4 @@ Navigate to http://localhost:3000.
 - Write some tests using react-testing-library
 - Broken the css file out to separate files for the separate components
 - Used sass
+- Not use state for the "disabled" state of the FormButton. It slipped my mind that I could just use standard HTML for that.
