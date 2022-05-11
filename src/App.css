@@ -23,3 +23,7 @@
   background-color: transparent;
   text-align: left;
 }
+
+.autocomplete-dropdown .matching-letters {
+  font-weight: bold;
+}

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 
-const ITEMS = ["hello", "goodbye", "foobar"];
+const ITEMS = ["hello", "goodbye", "foobar", "hear"];
 
 function AutocompleteDropdown() {
   const [text, setText] = useState("");
@@ -9,6 +9,18 @@ function AutocompleteDropdown() {
 
   function filteredItems() {
     return ITEMS.filter((item) => item.startsWith(text));
+  }
+
+  function itemTextWithMatch(item) {
+    const firstMatchingIndex = item.indexOf(text);
+    return (
+      <>
+        <span className="matching-letters">
+          {item.substr(firstMatchingIndex, text.length)}
+        </span>
+        {item.substr(firstMatchingIndex + text.length, item.length)}
+      </>
+    );
   }
 
   function dropDown() {
@@ -20,9 +32,14 @@ function AutocompleteDropdown() {
       <div className="autocomplete-dropdown">
         {filteredItems().map((item) => (
           <div key={item}>
-            <button onMouseDown={e => e.preventDefault()} onClick={() => {
-              setText(item);
-            }}>{item}</button>
+            <button
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => {
+                setText(item);
+              }}
+            >
+              {itemTextWithMatch(item)}
+            </button>
           </div>
         ))}
       </div>
