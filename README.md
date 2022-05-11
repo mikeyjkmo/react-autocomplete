@@ -18,3 +18,9 @@ npm run start
 ```
 
 Navigate to http://localhost:3000.
+
+# With more time I would
+
+- Write some tests using react-testing-library
+- Broken the css file out to separate files for the separate components
+- Used sass
