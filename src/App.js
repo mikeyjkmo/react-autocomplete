@@ -1,27 +1,8 @@
 import { useCallback, useState } from "react";
 import { fetchMarvelCharacters } from "./marvelApi";
 import { AutocompleteDropdown } from "./AutocompleteDropdown";
-import PropTypes from 'prop-types';
 
 import "./App.css";
-
-function FormButton({ disabled, children }) {
-  const classes = [
-    "form-button",
-  ]
-
-  if (disabled) {
-    classes.push("disabled");
-  }
-
-  return (
-      <button className={classes.join(" ")}>{ children }</button>
-  );
-}
-
-FormButton.propTypes = {
-  disabled: PropTypes.bool,
-}
 
 function App() {
   const [autoCompletionItems, setAutoCompletionItems] = useState([]);
@@ -56,7 +37,9 @@ function App() {
             onDebouncedTextInput={onDebouncedTextInput}
             onTextInput={onTextInput}
           />
-          <FormButton disabled={searchButtonDisabled}>Search</FormButton>
+          <button className="form-button" disabled={searchButtonDisabled}>
+            Search
+          </button>
         </div>
       </div>
     </div>

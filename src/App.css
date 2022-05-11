@@ -38,7 +38,7 @@ input {
   font-size: 0.7em;
 }
 
-.disabled {
+.form-button[disabled] {
   opacity: 0.5;
 }
 
