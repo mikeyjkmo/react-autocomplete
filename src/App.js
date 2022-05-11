@@ -1,107 +1,64 @@
-import { useEffect, useState } from "react";
-import { useDebounce } from "./utils";
-import { fakeFetchMarvelCharacters } from "./marvelApi";
+import { useCallback, useState } from "react";
+import { fetchMarvelCharacters } from "./marvelApi";
+import { AutocompleteDropdown } from "./AutocompleteDropdown";
 import PropTypes from 'prop-types';
 
 import "./App.css";
 
-function AutocompleteDropdown({
-  autoCompletionItems,
-  onTextInput,
-  debounceDelay = 1000,
-  caseSensitive = false,
-}) {
-  const [text, setText] = useState("");
-  const [inputRef, setInputRef] = useState();
-  const [inFocus, setInFocus] = useState();
-  const debouncedText = useDebounce(text, debounceDelay);
+function FormButton({ disabled, children }) {
+  const classes = [
+    "form-button",
+  ]
 
-  useEffect(() => {
-    onTextInput(debouncedText);
-  }, [debouncedText, onTextInput]);
-
-  function itemTextWithMatch(item) {
-    const itemToCompare = (!caseSensitive) ? item.toLowerCase() : item;
-    const textToCompare = (!caseSensitive) ? text.toLowerCase() : text;
-
-    if (!itemToCompare.startsWith(textToCompare)) {
-      return item;
-    }
-
-    const firstMatchingIndex = itemToCompare.indexOf(textToCompare);
-    return (
-      <>
-        <span className="matching-letters">
-          {item.substr(firstMatchingIndex, text.length)}
-        </span>
-        {item.substr(firstMatchingIndex + text.length, item.length)}
-      </>
-    );
-  }
-
-  function renderDropDown() {
-    if (!inFocus) {
-      return null;
-    }
-
-    return (
-      <div className="autocomplete-dropdown">
-        {autoCompletionItems.map((item) => (
-          <div key={item}>
-            <button
-              onMouseDown={(e) => e.preventDefault()}
-              onClick={() => {
-                setText(item);
-                setInFocus(false);
-                inputRef.blur();
-              }}
-            >
-              {itemTextWithMatch(item)}
-            </button>
-          </div>
-        ))}
-      </div>
-    );
+  if (disabled) {
+    classes.push("disabled");
   }
 
   return (
-    <div className="autocomplete">
-      <input
-        type="text"
-        className="autocomplete-input"
-        value={text}
-        onInput={(e) => setText(e.target.value)}
-        ref={(input) => setInputRef(input)}
-        onFocus={() => setInFocus(true)}
-        onBlur={() => setInFocus(false)}
-      />
-      {renderDropDown()}
-    </div>
+      <button className={classes.join(" ")}>{ children }</button>
   );
 }
 
-AutocompleteDropdown.propTypes = {
-  autoCompletionItems: PropTypes.array,
-  onTextInput: PropTypes.func,
-  debounceDelay: PropTypes.number,
-  caseSensitive: PropTypes.bool,
+FormButton.propTypes = {
+  disabled: PropTypes.bool,
 }
 
 function App() {
   const [autoCompletionItems, setAutoCompletionItems] = useState([]);
+  const [searchButtonDisabled, setSearchButtonDisabled] = useState(true);
 
-  const onTextInput = (text) => {
-    return fakeFetchMarvelCharacters(text)
+  const onDebouncedTextInput = useCallback((text) => {
+    if (text.length === 0) {
+      setAutoCompletionItems([]);
+      return;
+    }
+
+    return fetchMarvelCharacters(text)
       .then((res) => res.data.results.map((character) => character.name))
       .then(setAutoCompletionItems);
-  };
+  }, []);
+
+  const onTextInput = useCallback((text) => {
+    if (text.length > 0) {
+      setSearchButtonDisabled(false);
+    } else {
+      setSearchButtonDisabled(true);
+    }
+  }, []);
 
   return (
     <div className="App">
-      <AutocompleteDropdown
-        autoCompletionItems={autoCompletionItems}
-        onTextInput={onTextInput}
-      />
+      <div className="mvform">
+        <div className="row field-name">Search</div>
+        <div className="row">
+          <AutocompleteDropdown
+            autoCompletionItems={autoCompletionItems}
+            onDebouncedTextInput={onDebouncedTextInput}
+            onTextInput={onTextInput}
+          />
+          <FormButton disabled={searchButtonDisabled}>Search</FormButton>
+        </div>
+      </div>
     </div>
   );
 }
