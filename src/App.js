@@ -1,23 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+
+const ITEMS = ["hello", "goodbye", "foobar"];
+
+function AutocompleteDropdown() {
+  const [text, setText] = useState("");
+  const [inFocus, setInFocus] = useState(false);
+
+  function filteredItems() {
+    return ITEMS.filter((item) => item.startsWith(text));
+  }
+
+  function dropDown() {
+    if (!inFocus) {
+      return null;
+    }
+
+    return (
+      <div className="autocomplete-dropdown">
+        {filteredItems().map((item) => (
+          <div key={item}>
+            <button onMouseDown={e => e.preventDefault()} onClick={() => {
+              setText(item);
+            }}>{item}</button>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="autocomplete">
+      <input
+        type="text"
+        className="autocomplete-input"
+        value={text}
+        onInput={(e) => setText(e.target.value)}
+        onFocus={() => setInFocus(true)}
+        onBlur={() => setInFocus(false)}
+      />
+      {dropDown()}
+    </div>
+  );
+}
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <AutocompleteDropdown />
     </div>
   );
 }
