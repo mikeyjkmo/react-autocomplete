@@ -21,13 +21,13 @@ function AutocompleteDropdown({ debounceDelay = 1000 }) {
   const [inputRef, setInputRef] = useState();
   const [inFocus, setInFocus] = useState();
 
-  const [matchingItems, setMatchingItems] = useState([]);
+  const [autoCompletionItems, setAutoCompletionItems] = useState([]);
   const debouncedText = useDebounce(text, debounceDelay);
 
   useEffect(() => {
     fakeFetchMarvelCharacteres(debouncedText)
       .then((res) => res.data.results.map((character) => character.name))
-      .then(setMatchingItems);
+      .then(setAutoCompletionItems);
   }, [debouncedText]);
 
   function itemTextWithMatch(item) {
@@ -56,7 +56,7 @@ function AutocompleteDropdown({ debounceDelay = 1000 }) {
 
     return (
       <div className="autocomplete-dropdown">
-        {matchingItems.map((item) => (
+        {autoCompletionItems.map((item) => (
           <div key={item}>
             <button
               onMouseDown={(e) => e.preventDefault()}
