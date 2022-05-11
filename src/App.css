@@ -26,6 +26,16 @@
   cursor: pointer;
 }
 
-.autocomplete-dropdown .matching-letters {
+.autocomplete-dropdown button:hover {
+  background-color: #333;
+  color: #fff;
+}
+
+.autocomplete-dropdown button .matching-letters {
   font-weight: bold;
+  color: #00d;
+}
+
+.autocomplete-dropdown button:hover .matching-letters {
+  color: #ff0;
 }
