@@ -20,6 +20,16 @@ Notes:
 6. You must NOT use a UI component library (e.g material-ui) as it beats the purpose of this exercise.
 7. Please avoid using a CSS framework (e.g bootstrap) to demonstrate your css skills.
 
+## Supported Features
+
+* This is a relatively generic autocomplete component that can be used with either
+  an API or a static list. It's up to the user of the component to decide how
+  to filter the autocomplete list based on the text input typed in by the user.
+* It supports debouncing (defaults to 1 second, but can be configuable) to avoid
+  flooding the API server with requests.
+* It automatically highlights the currently matching prefix in the
+  autocompletion list items.
+
 ## Running
 
 You'll firstly need an API key from the Marvel developer portal. Ensure that
